@@ -18,7 +18,7 @@ namespace TerraformCost
     /// </summary>
     public class Mod : IMod
     {
-        public const string Version = "1.0.0";
+        public const string Version = "1.0.1";
         public const string HarmonyId = "com.erdgeist.terraformcost";
 
         public static ILog log = LogManager.GetLogger("TerraformCost").SetShowsErrorsInUI(false);

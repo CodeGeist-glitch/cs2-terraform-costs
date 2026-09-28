@@ -36,7 +36,7 @@ Building/road/water-tool terrain smoothing is never charged - only deliberate us
 	<!--Link to the forum post where the mod can be discussed-->
 	<ForumLink Value="" />
 	<!--Version of the mod-->
-	<ModVersion Value="1.0.0" />
+	<ModVersion Value="1.0.1" />
 	<!--Recommended version of the base game to use the mod-->
 	<GameVersion Value="1.6.*" />
 	<!--Dependency for the mod, can be set multiple times-->
@@ -47,10 +47,11 @@ Building/road/water-tool terrain smoothing is never charged - only deliberate us
 	<!--None - the mod only touches the base game's terrain tools.-->
 	<!--Change log for new version. Single line or multi line. Supports minimal markdown subset-->
 	<ChangeLog>
-1.0.0 - first release
+1.0.1 - Source code is now on GitHub (MIT). No functional changes; cleaner release build without local build paths.
 	</ChangeLog>
 	<!--External link, can be set multiple times. supported types are "discord", "github", "youtube", "twitch", "x", "paypal", "patreon", "buymeacoffee", "kofi", "crowdin", "gitlab", "gofundme"-->
 	<ExternalLink Type="youtube" Url="https://www.youtube.com/channel/UCDCEUkd6IMufmAR49u6ZrjQ?sub_confirmation=1" />
+	<ExternalLink Type="github" Url="https://github.com/CodeGeist-glitch/cs2-terraform-costs" />
 	<ExternalLink Type="discord" Url="https://discord.gg/nc46WmwMdB" />
 	<!--Supported values Public, Private, Unlisted-->
 	<AccessLevel Value="Public" />
