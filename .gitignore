@@ -1,0 +1,16 @@
+# Build output
+bin/
+obj/
+[Bb]in/
+[Oo]bj/
+
+# Visual Studio / Rider / editors
+.vs/
+.idea/
+*.user
+*.suo
+*.userprefs
+
+# Binaries: Harmony comes from NuGet, never commit game or third-party DLLs
+*.dll
+*.pdb

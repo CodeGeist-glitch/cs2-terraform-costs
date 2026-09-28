@@ -1,0 +1,57 @@
+<Publish>
+	<!--Id must be set in order to update existed mod. it is not required for publishing mod for the first time-->
+	<!--First release: leave blank. After the first successful "Publish", copy the ModId the tool
+	    prints back into this field - every future NewVersion/Update depends on it matching.-->
+	<ModId Value="161185" />
+	<!--Name of the mod to display to players-->
+	<DisplayName Value="Terraform Costs" />
+	<!--Short description of the mod-->
+	<ShortDescription Value="Every terrain-tool stroke costs money, priced by the real volume of earth you move - with a live cost tooltip while you drag." />
+	<!--Long description of the mod. Single line or multi line. Supports minimal markdown subset-->
+	<LongDescription>
+**Terraform Costs**
+
+Ever felt like Cities: Skylines II's terrain tools are basically free money-printing machines for flattening an entire mountain range before you've even placed your first road? This brings back the classic Cities: Skylines (1) "Terraform Tool" experience: every raise, lower, level, soften and slope stroke costs money, priced by how much earth you're actually moving. Run out of money and the brush just stops - no debt, no drama.
+
+- Price is based on the *real, measured* volume of terrain moved for all 4 terrain tools (Raise/Lower, Level, Soften, Slope) - not just brush size and a timer.
+- A live tooltip while you drag shows the moved volume (m³) and the running cost (₡) for the current stroke, plus the price per 100 m³.
+- Every cubic metre costs the same no matter which tool moved it (adjustable Level/Soften/Slope price factor).
+- Optional refund for the part of a stroke that lowers terrain (0% by default).
+- Free in the map editor, as it should be. Unlimited-money games are unaffected.
+- Fully adjustable in Options: enable/disable, 0-10x price multiplier, Level/Soften/Slope price factor, lowering refund %.
+- English and German localisation.
+
+**Compatibility:** Hard Mode Continued also charges for terraforming - if you run both, you'll be charged by both, so pick one if you don't want double charges. TerraformCost detects it and shows a warning in Options.
+
+Building/road/water-tool terrain smoothing is never charged - only deliberate use of the Landscaping terrain tool itself.
+	</LongDescription>
+	<!--Thumbnail-->
+	<Thumbnail Value="Properties/Thumbnail.png" />
+	<!--Screenshot, can be set multiple times-->
+	<Screenshot Value="Properties/Screenshot1.png" />
+	<Screenshot Value="Properties/Screenshot2.png" />
+	<!--Tag, can be set multiple times-->
+	<Tag Value="Code Mod" />
+	<Tag Value="UITerraforming" />
+	<!--Link to the forum post where the mod can be discussed-->
+	<ForumLink Value="" />
+	<!--Version of the mod-->
+	<ModVersion Value="1.0.0" />
+	<!--Recommended version of the base game to use the mod-->
+	<GameVersion Value="1.6.*" />
+	<!--Dependency for the mod, can be set multiple times-->
+	<!--None: TerraformCost bundles its own 0Harmony.dll directly in the content folder (see
+	    Publish_TerraformCost.bat), the same pattern several other published Harmony-based code
+	    mods on Paradox Mods use, so no DependencyPack entry is required.-->
+	<!--Required DLC, can be set multiple times. Supported values are "Landmark Buildings", "San Fransisco Set", "Beach Properties", "Urban Promenades", "Modern Architecture"-->
+	<!--None - the mod only touches the base game's terrain tools.-->
+	<!--Change log for new version. Single line or multi line. Supports minimal markdown subset-->
+	<ChangeLog>
+1.0.0 - first release
+	</ChangeLog>
+	<!--External link, can be set multiple times. supported types are "discord", "github", "youtube", "twitch", "x", "paypal", "patreon", "buymeacoffee", "kofi", "crowdin", "gitlab", "gofundme"-->
+	<ExternalLink Type="youtube" Url="https://www.youtube.com/channel/UCDCEUkd6IMufmAR49u6ZrjQ?sub_confirmation=1" />
+	<ExternalLink Type="discord" Url="https://discord.gg/nc46WmwMdB" />
+	<!--Supported values Public, Private, Unlisted-->
+	<AccessLevel Value="Public" />
+</Publish>

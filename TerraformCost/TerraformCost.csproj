@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    TerraformCost - Cities: Skylines II code mod: pay for terraforming by the real volume of earth moved.
+    Build:  dotnet build -c Release -p:ManagedPath="...\Cities2_Data\Managed"   (see ..\README.md)
+  -->
+
+  <Import Project="..\build\CS2Mod.props" />
+
+  <PropertyGroup>
+    <AssemblyName>TerraformCost</AssemblyName>
+    <RootNamespace>TerraformCost</RootNamespace>
+    <Version>1.0.0</Version>
+    <UseHarmony>true</UseHarmony>
+  </PropertyGroup>
+
+  <!--
+    Public-release builds: pass -p:ReleasePublic=true (the publish script does this) to strip
+    test-only helpers (see TestApi.cs) from the DLL that ships to Paradox Mods. Normal local
+    builds (plain "dotnet build -c Release") are unaffected and keep the full TestApi surface
+    for ModTestHarness.
+  -->
+  <PropertyGroup Condition="'$(ReleasePublic)'=='true'">
+    <DefineConstants>$(DefineConstants);RELEASE_PUBLIC</DefineConstants>
+  </PropertyGroup>
+
+</Project>

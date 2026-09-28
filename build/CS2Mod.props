@@ -1,0 +1,122 @@
+<Project>
+
+  <!--
+    CS2Mod.props - shared build settings for a hand-rolled Cities: Skylines II code mod
+    (net48, C# 9, plain "dotnet build"; no Unity project and no in-game Modding Toolchain needed).
+
+    A mod project imports this file from its own .csproj, then sets AssemblyName,
+    RootNamespace and Version, e.g.:
+
+      <Project Sdk="Microsoft.NET.Sdk">
+        <Import Project="..\build\CS2Mod.props" />
+        <PropertyGroup>
+          <AssemblyName>TerraformCost</AssemblyName>
+          <RootNamespace>TerraformCost</RootNamespace>
+          <Version>1.0.0</Version>
+          <UseHarmony>true</UseHarmony>
+        </PropertyGroup>
+      </Project>
+
+    WHERE THE GAME ASSEMBLIES COME FROM (in this order):
+      1. the MSBuild property   ManagedPath      (dotnet build -p:ManagedPath="...\Cities2_Data\Managed")
+      2. the environment var    CSII_MANAGEDPATH (set by the official CS2 Modding Toolchain)
+      3. the default Steam install location
+    If Game.dll is not found in the resulting folder, the build stops with a clear error.
+
+    WHERE THE MOD IS DEPLOYED (only when Deploy is not "false"):
+      1. the MSBuild property   UserDataPath
+      2. the environment var    CSII_USERDATAPATH (official toolchain)
+      3. %USERPROFILE%\AppData\LocalLow\Colossal Order\Cities Skylines II
+    Compile-only, without copying anything into the game's Mods folder:
+      dotnet build -c Release -p:Deploy=false
+  -->
+
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>net48</TargetFramework>
+    <LangVersion>9.0</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Nullable>disable</Nullable>
+    <DebugType>portable</DebugType>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <NoWarn>$(NoWarn);CS0618;CS1701;CS1702;MSB3277</NoWarn>
+    <!-- Strip machine-specific source paths from the PDB/DLL so a build does not embed your folder layout. -->
+    <PathMap>$(MSBuildProjectDirectory)=$(AssemblyName)</PathMap>
+    <!-- Opt-in: set <UseHarmony>true</UseHarmony> in the project's own PropertyGroup. -->
+    <UseHarmony Condition="'$(UseHarmony)' == ''">false</UseHarmony>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- Game assemblies. A -p:ManagedPath=... on the command line always wins. -->
+    <ManagedPath Condition="'$(ManagedPath)' == ''">$(CSII_MANAGEDPATH)</ManagedPath>
+    <ManagedPath Condition="'$(ManagedPath)' == ''">$([System.Environment]::GetEnvironmentVariable('CSII_MANAGEDPATH', 'EnvironmentVariableTarget.User'))</ManagedPath>
+    <ManagedPath Condition="'$(ManagedPath)' == ''">$(ProgramFiles)\Steam\steamapps\common\Cities Skylines II\Cities2_Data\Managed</ManagedPath>
+    <ManagedPath Condition="'$(ManagedPath)' != '' AND HasTrailingSlash('$(ManagedPath)')">$(ManagedPath.TrimEnd('\'))</ManagedPath>
+
+    <!-- Deploy target folder. -->
+    <UserDataPath Condition="'$(UserDataPath)' == ''">$(CSII_USERDATAPATH)</UserDataPath>
+    <UserDataPath Condition="'$(UserDataPath)' == ''">$([System.Environment]::GetEnvironmentVariable('CSII_USERDATAPATH', 'EnvironmentVariableTarget.User'))</UserDataPath>
+    <UserDataPath Condition="'$(UserDataPath)' == ''">$(USERPROFILE)\AppData\LocalLow\Colossal Order\Cities Skylines II</UserDataPath>
+    <DeployDir>$(UserDataPath)\Mods\$(AssemblyName)</DeployDir>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="Game"><HintPath>$(ManagedPath)\Game.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="Colossal.Core"><HintPath>$(ManagedPath)\Colossal.Core.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="Colossal.Logging"><HintPath>$(ManagedPath)\Colossal.Logging.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="Colossal.IO.AssetDatabase"><HintPath>$(ManagedPath)\Colossal.IO.AssetDatabase.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="Colossal.AssetPipeline"><HintPath>$(ManagedPath)\Colossal.AssetPipeline.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="Colossal.IO"><HintPath>$(ManagedPath)\Colossal.IO.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="Colossal.Mathematics"><HintPath>$(ManagedPath)\Colossal.Mathematics.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="Colossal.Collections"><HintPath>$(ManagedPath)\Colossal.Collections.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="Colossal.PSI.Common"><HintPath>$(ManagedPath)\Colossal.PSI.Common.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="Colossal.UI.Binding"><HintPath>$(ManagedPath)\Colossal.UI.Binding.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="Colossal.Localization"><HintPath>$(ManagedPath)\Colossal.Localization.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.CoreModule"><HintPath>$(ManagedPath)\UnityEngine.CoreModule.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.ScreenCaptureModule"><HintPath>$(ManagedPath)\UnityEngine.ScreenCaptureModule.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.ImageConversionModule"><HintPath>$(ManagedPath)\UnityEngine.ImageConversionModule.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.InputLegacyModule" Condition="Exists('$(ManagedPath)\UnityEngine.InputLegacyModule.dll')"><HintPath>$(ManagedPath)\UnityEngine.InputLegacyModule.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="Unity.Burst"><HintPath>$(ManagedPath)\Unity.Burst.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="Unity.Collections"><HintPath>$(ManagedPath)\Unity.Collections.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="Unity.Entities"><HintPath>$(ManagedPath)\Unity.Entities.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="Unity.Mathematics"><HintPath>$(ManagedPath)\Unity.Mathematics.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="Unity.InputSystem"><HintPath>$(ManagedPath)\Unity.InputSystem.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="Newtonsoft.Json"><HintPath>$(ManagedPath)\Newtonsoft.Json.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="Unity.RenderPipelines.Core.Runtime" Condition="Exists('$(ManagedPath)\Unity.RenderPipelines.Core.Runtime.dll')"><HintPath>$(ManagedPath)\Unity.RenderPipelines.Core.Runtime.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="Unity.RenderPipelines.HighDefinition.Runtime" Condition="Exists('$(ManagedPath)\Unity.RenderPipelines.HighDefinition.Runtime.dll')"><HintPath>$(ManagedPath)\Unity.RenderPipelines.HighDefinition.Runtime.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="Cinemachine" Condition="Exists('$(ManagedPath)\Cinemachine.dll')"><HintPath>$(ManagedPath)\Cinemachine.dll</HintPath><Private>false</Private></Reference>
+  </ItemGroup>
+
+  <!--
+    Opt-in Harmony: <UseHarmony>true</UseHarmony> in the project's own PropertyGroup.
+    0Harmony.dll comes from the NuGet package Lib.Harmony 2.2.2 (nothing is committed to the repo).
+    It is copied next to the mod DLL in bin\ and, on deploy, into the game's Mods folder, because the
+    mod ships its own copy of 0Harmony.dll.
+  -->
+  <ItemGroup Condition="'$(UseHarmony)' == 'true'">
+    <PackageReference Include="Lib.Harmony" Version="2.2.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Update="System"><Private>false</Private></Reference>
+    <Reference Update="System.Core"><Private>false</Private></Reference>
+    <Reference Update="System.Data"><Private>false</Private></Reference>
+  </ItemGroup>
+
+  <!-- Fail early with a readable message instead of dozens of "type not found" compiler errors. -->
+  <Target Name="CheckCS2GamePath" BeforeTargets="ResolveAssemblyReferences;CoreCompile">
+    <Error Condition="!Exists('$(ManagedPath)\Game.dll')"
+           Text="Cities: Skylines II game assemblies not found: '$(ManagedPath)\Game.dll' does not exist. Point the build at your install, e.g.  dotnet build -c Release -p:ManagedPath=&quot;C:\Program Files (x86)\Steam\steamapps\common\Cities Skylines II\Cities2_Data\Managed&quot;  or set the CSII_MANAGEDPATH environment variable (the official CS2 Modding Toolchain sets it)." />
+  </Target>
+
+  <!-- Deploy: copy <AssemblyName>.dll + .pdb (and, if UseHarmony, 0Harmony.dll) into the local Mods folder. -->
+  <!-- Compile-only (no copy into Mods, safe while the game runs): dotnet build -c Release -p:Deploy=false -->
+  <Target Name="DeployToMods" AfterTargets="Build" Condition="'$(Deploy)' != 'false'">
+    <MakeDir Directories="$(DeployDir)" />
+    <Copy SourceFiles="$(TargetPath);$(TargetDir)$(TargetName).pdb" DestinationFolder="$(DeployDir)" SkipUnchangedFiles="false" />
+    <Copy SourceFiles="$(TargetDir)0Harmony.dll" DestinationFolder="$(DeployDir)" SkipUnchangedFiles="false" Condition="'$(UseHarmony)' == 'true' AND Exists('$(TargetDir)0Harmony.dll')" />
+    <Message Text="$(AssemblyName) deployed to $(DeployDir)" Importance="high" />
+  </Target>
+
+</Project>
